@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>도르핀 200일 퀴즈</title>
+  <style>
+    body {
+      font-family: 'Pretendard', sans-serif;
+      background-color: #f0f4f8;
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+    .quiz-container {
+      max-width: 700px;
+      margin: auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .question {
+      margin-bottom: 24px;
+    }
+    .question h3 {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+    .answers label {
+      display: block;
+      margin-bottom: 6px;
+    }
+    .submit-btn, .download-btn {
+      display: block;
+      margin: 20px auto 0;
+      padding: 10px 20px;
+      font-size: 1rem;
+      background-color: #00D0FF;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    .result {
+      text-align: center;
+      font-size: 1.4rem;
+      margin-top: 20px;
+      padding: 20px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="quiz-container" id="quizContainer">
+    <h1>도르핀 200일 퀴즈</h1>
+    <form id="quizForm"></form>
+    <div id="result" class="result"></div>
+    <button id="downloadBtn" class="download-btn" style="display:none;">결과 이미지 저장하기</button>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script>
+    const questions = [/* ... 기존 문제 배열 유지 ... */];
+
+    const form = document.getElementById('quizForm');
+    const resultDiv = document.getElementById('result');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    questions.forEach((item, index) => {
+      const qDiv = document.createElement('div');
+      qDiv.className = 'question';
+
+      const qTitle = document.createElement('h3');
+      qTitle.textContent = `${index + 1}. ${item.q}`;
+      qDiv.appendChild(qTitle);
+
+      const answersDiv = document.createElement('div');
+      answersDiv.className = 'answers';
+      item.a.forEach((choice, i) => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="radio" name="q${index}" value="${i}" required> ${choice}`;
+        answersDiv.appendChild(label);
+      });
+      qDiv.appendChild(answersDiv);
+      form.appendChild(qDiv);
+    });
+
+    const submitBtn = document.createElement('button');
+    submitBtn.textContent = '제출하기';
+    submitBtn.className = 'submit-btn';
+    submitBtn.type = 'submit';
+    form.appendChild(submitBtn);
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      let score = 0;
+      questions.forEach((q, i) => {
+        const selected = form[`q${i}`].value;
+        if (parseInt(selected) === q.correct) {
+          score += q.score;
+        }
+      });
+
+      let level = '';
+      if (score >= 90) level = '🥇 최고의 팬 (육황상제)';
+      else if (score >= 70) level = '🥈 상위 10% 복어(육수)';
+      else if (score >= 50) level = '🥉 중간 복어';
+      else if (score >= 30) level = '😅 이름은 알아요 복어';
+      else level = '🤔 팬 아님';
+
+      resultDiv.innerHTML = `🎉 당신의 점수는 <strong>${score}점</strong>입니다!<br><br>📊 등급: <strong>${level}</strong>`;
+      downloadBtn.style.display = 'block';
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      html2canvas(document.getElementById('result')).then(canvas => {
+        const link = document.createElement('a');
+        link.download = '도르핀_퀴즈_결과.png';
+        link.href = canvas.toDataURL();
+        link.click();
+      });
+    });
+  </script>
+</body>
+
+</html>

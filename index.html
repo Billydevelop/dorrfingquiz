@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>도르핀 200일 퀴즈</title>
+    <style>
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #f0f4f8;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .quiz-container {
+            max-width: 700px;
+            margin: auto;
+            background: #fff;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .question {
+            margin-bottom: 24px;
+        }
+
+        .question h3 {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+        }
+
+        .answers label {
+            display: block;
+            margin-bottom: 6px;
+        }
+
+        .submit-btn {
+            display: block;
+            margin: 30px auto 0;
+            padding: 10px 20px;
+            font-size: 1rem;
+            background-color: #00D0FF;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .result {
+            text-align: center;
+            font-size: 1.4rem;
+            margin-top: 20px;
+        }
+
+        .result img {
+            margin-top: 16px;
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="quiz-container">
+        <h1>도르핀 200일 퀴즈</h1>
+        <form id="quizForm">
+            <!-- 문제는 JS에서 자동 생성 -->
+        </form>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        const questions = [
+            { q: '도르핀의 주 활동 플랫폼은?', a: ['SOOP(숲)', '유튜브', '트위치'], correct: 0, score: 2 },
+            { q: '도르핀의 닉네임은 어떤 동물에서 따왔을까?', a: ['돌고래', '토끼', '돌거북'], correct: 0, score: 2 },
+            { q: '도르핀의 팬을 부르는 말은?', a: ['복어', '북어', '버거'], correct: 0, score: 2 },
+            { q: '도르핀의 생방송 중 가장 많이 하는 콘텐츠는?', a: ['먹방', '소통', '공포게임'], correct: 1, score: 2 },
+            { q: '도르핀이 가습기 파트너 스트리머 축하송으로 부른 노래 이름은 ?', a: ['교복에서 부케까지', '하꼬에서 파스까지', '서울에서 부산까지'], correct: 1, score: 2 },
+            { q: '도르핀의 첫 방송 시기는 언제쯤일까?', a: ['2022', '2023', '2024'], correct: 2, score: 2 },
+            { q: '도르핀 방송에 자주 등장하는 배경음악은?', a: ['피아노', '힙합', '이게 정답임 보너스임'], correct: 2, score: 2 },
+            { q: '도르핀이 좋아하는 이모티콘은?', a: ['🐬', '🐰', '🐱'], correct: 0, score: 2 },
+            { q: '도르핀 방송은 마이크를 사용하는가?', a: ['예', '아니오'], correct: 0, score: 2 },
+            { q: '팬들과 소통할 때 디스코드에서 주로 사용하는 기능은?', a: ['음성채팅', '채팅창', '영상통화'], correct: 0, score: 2 },
+            { q: '도르핀의 대표 인사는?', a: ['안녕 얘들아', '왔도르~', '헬로우'], correct: 0, score: 2 },
+            { q: '도르핀 방송 시간대는 보통 언제?', a: ['싯가', '오후', '새벽'], correct: 0, score: 2 },
+            { q: '도르핀은 어떤 장르의 게임을 싫어하나?', a: ['FPS', '롤', '공포'], correct: 2, score: 2 },
+            { q: '도르핀 방송은 어떤 컨셉?', a: ['ASMR', '감성 라디오', '소통 및 종합방송'], correct: 2, score: 2 },
+            { q: '도르핀의 시그니처 노래는?', a: ['시퍼런 봄', '시뻘건 입술', '샛노란 우산'], correct: 2, score: 3 },
+            { q: '도르핀이 방송 중 가장 많이 말한 단어는?', a: ['헐', '아 진짜', '대박'], correct: 1, score: 3 },
+            { q: '도르핀 방송 중 채팅창에 가장 많이 보이는 단어는? (힌트: 출제자 육수임)', a: ['ㅋㅋㅋ', '응원봉 이모티콘', '사랑해~~'], correct: 2, score: 3 },
+            { q: '도르핀과 참여한 적 없는 방송 콘텐츠는?', a: ['게임합방', '노래대회', '엑셀방'], correct: 2, score: 3 },
+            { q: '도르핀 방송에서 한 적 없는 콘텐츠는?', a: ['노래 방송', '스코프 방송', '저격 방송'], correct: 2, score: 3 },
+            { q: '도르핀이 한 번에 4 박스를 선물받은 과자 이름은?', a: ['크라운산도', '뽀또', '몽쉘'], correct: 1, score: 3 },
+            { q: '도르핀은 누구의 것일까?', a: ['반려견', '회장님', '모두의 갓트리머'], correct: 2, score: 3 },
+            { q: '도르핀 방송 켜진지 모르고 열창한 노래 이름은??', a: ['하이파이브~', '하이라이트', '하이라이스'], correct: 1, score: 3 },
+            { q: '도르핀 팬카페 공지사항 및 스케쥴에 적힌 설명글은?', a: ['도르핀은 사랑입니다', '도르핀과 함께한 200일', '방송 공지사항 및 스케쥴'], correct: 2, score: 3 },
+            { q: '도르핀이 가장 아꼈던 굿즈 아이템은?', a: ['키링', '후드티', '아직 없다'], correct: 2, score: 3 },
+            { q: '도르핀 유튜브 채널에 올라온 영상 제목은?', a: ['17살의 노래', '18살의 방황', '19금 비디오'], correct: 1, score: 8 },
+            { q: '도르핀이 방송에서 눈물을 흘린 이유는?', a: ['팬 선물 리액션', '눈물이 맛있다고 해서 먹어보려고', '편지보고 감동 받음'], correct: 2, score: 8 },
+            { q: '도르핀 방송 중 BGM이 꺼져서 난 해프닝은?', a: ['갑분싸', '팬들이 직접 불러줌', '침묵 속 채팅 난리'], correct: 2, score: 8 },
+            { q: '도르핀이 방송 도중 부른 노래가 아닌 것은?', a: ['반찬가게 아가씨', '숲', '만찬가'], correct: 0, score: 8 },
+            { q: '도르핀 팬이 보낸 가장 특이한 선물은?', a: ['자작곡', '손편지', '도르핀 피규어'], correct: 1, score: 8 },
+        ];
+
+
+        const form = document.getElementById('quizForm');
+        const resultDiv = document.getElementById('result');
+        const downloadBtn = document.getElementById('downloadBtn');
+
+        const levelImages = {
+            '🥇 최고의 팬': 'https://example.com/images/fan_5.png',
+            '🥈 상위 10% 도르찐': 'https://example.com/images/fan_4.png',
+            '🥉 중간 팬': 'https://example.com/images/fan_3.png',
+            '😅 이름은 알아요 팬': 'https://example.com/images/fan_2.png',
+            '🤔 팬 아님': 'https://example.com/images/fan_1.png'
+        };
+
+        questions.forEach((item, index) => {
+            const qDiv = document.createElement('div');
+            qDiv.className = 'question';
+
+            const qTitle = document.createElement('h3');
+            qTitle.textContent = `${index + 1}. ${item.q}`;
+            qDiv.appendChild(qTitle);
+
+            const answersDiv = document.createElement('div');
+            answersDiv.className = 'answers';
+            item.a.forEach((choice, i) => {
+                const label = document.createElement('label');
+                label.innerHTML = `<input type="radio" name="q${index}" value="${i}" required> ${choice}`;
+                answersDiv.appendChild(label);
+            });
+            qDiv.appendChild(answersDiv);
+            form.appendChild(qDiv);
+        });
+
+        const submitBtn = document.createElement('button');
+        submitBtn.textContent = '제출하기';
+        submitBtn.className = 'submit-btn';
+        submitBtn.type = 'submit';
+        form.appendChild(submitBtn);
+
+        form.addEventListener('submit', function (e) {
+            e.preventDefault();
+            let score = 0;
+            questions.forEach((q, i) => {
+                const selected = form[`q${i}`].value;
+                if (parseInt(selected) === q.correct) {
+                    score += q.score;
+                }
+            });
+
+            let level = '';
+            if (score >= 90) level = '🥇 최고의 팬 (육황상제)';
+            else if (score >= 70) level = '🥈 상위 10% 복어(육수)';
+            else if (score >= 50) level = '🥉 중간 복어';
+            else if (score >= 30) level = '😅 이름은 알아요 복어';
+            else level = '🤔 팬 아님';
+
+            const imageUrl = levelImages[level] || '';
+
+            resultDiv.innerHTML = `🎉 당신의 점수는 <strong>${score}점</strong>입니다!<br><br>📊 등급: <strong>${level}</strong>`;
+            if (imageUrl) {
+                const img = document.createElement('img');
+                img.src = imageUrl;
+                img.alt = level;
+                resultDiv.appendChild(img);
+            }
+            downloadBtn.style.display = 'block';
+        });
+
+        downloadBtn.addEventListener('click', () => {
+            html2canvas(document.getElementById('result')).then(canvas => {
+                const link = document.createElement('a');
+                link.download = '도르핀_퀴즈_결과.png';
+                link.href = canvas.toDataURL();
+                link.click();
+            });
+        });
+    </script>
+</body>
+
+</html>
